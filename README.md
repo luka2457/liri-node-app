@@ -29,4 +29,4 @@ Taking user input and search, retrieve and display information from an API.
 -using "env" to keep information private.
 
 
-For more cool stuff checkout https://lukekarlovich.com
+For more cool stuff checkout http://lukekarlovich.com
