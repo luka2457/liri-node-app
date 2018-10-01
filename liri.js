@@ -9,9 +9,7 @@ var fs = require("fs");
 var argOne = process.argv[2];
 var argTwo = process.argv.slice(3).join(" ");
 
-
 //functions
-
 //spotify function
 function getSpotify(songName) {
     var spotify = new Spotify(keys.spotify);
@@ -20,11 +18,9 @@ function getSpotify(songName) {
         if (err) {
             return console.log('Error occurred: ' + err);
         } else {
-            console.log(data.tracks.items[0].name);
-            console.log("Artist(s): " + data.tracks.items[0].artists[0].name);
-            console.log("Song name: " + data.tracks.items[0].name);
-            console.log("Song preview: " + data.tracks.items[0].album.external_urls.spotify);
-            console.log("Album name: " + data.tracks.items[0].album.name);
+            var spotifyLog = "\n" + data.tracks.items[0].name + "\n" + "Artist(s): " + data.tracks.items[0].artists[0].name + "\n" + "Song name: " + data.tracks.items[0].name + "\n" + "Song preview: " + data.tracks.items[0].album.external_urls.spotify + "\n" + "Album name: " + data.tracks.items[0].album.name + "\n";
+            console.log(spotifyLog);
+            appendToFile(spotifyLog);
         }
     });
 };
@@ -38,17 +34,13 @@ function getMovie(movieName) {
         if (error) {
             console.log('Error:', error);
         } else {
-            console.log('Title: ' + jsonData.Title);
-            console.log('Year: ' + jsonData.Year);
-            console.log('IMDB Rated: ' + jsonData.imdbRating);
-            console.log('Rotten Tomatoes Rated: ' + jsonData.tomatoRating);
-            console.log('Country: ' + jsonData.Country);
-            console.log('language ' + jsonData.Language);
-            console.log('Plot: ' + jsonData.Plot);
-            console.log('Actors: ' + jsonData.Actors);
-        }
+            var movieLog = "\n"+ 'Title: ' + jsonData.Title +"\n"+ 'Year: ' + jsonData.Year +"\n"+ 'IMDB Rated: ' + jsonData.imdbRating +"\n"+ 'Rotten Tomatoes Rated: ' + jsonData.tomatoRating +"\n"+ 'Country: ' + jsonData.Country +"\n"+ 'language ' + jsonData.Language +"\n"+ 'Plot: ' + jsonData.Plot +"\n"+ 'Actors: ' + jsonData.Actors +"\n";
+            console.log(movieLog);
+            appendToFile(movieLog);
+        };
     });
 };
+
 //Concert-this function
 function getConcert(artist) {
     var url = "https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp&date=upcoming";
@@ -58,10 +50,10 @@ function getConcert(artist) {
         if (error) {
             console.log('Error:', error);
         } else {
-            console.log('Venue: ' + jsonData[0].venue.name);
-            console.log('Venue location : ' + jsonData[0].venue.city + ", " + jsonData[0].venue.region);
             var eventDate = moment(jsonData[0].datetime).format("MM/DD/YYYY");
-            console.log("Date: " + eventDate);
+            var concertLog = "\n"+ 'Venue: ' + jsonData[0].venue.name +"\n"+ 'Venue location : ' + jsonData[0].venue.city + ", " + jsonData[0].venue.region +"\n"+ "Date: " + eventDate +"\n";
+            console.log(concertLog);
+            appendToFile(concertLog);
         }
     });
 };
@@ -78,10 +70,7 @@ function getDoWhatItSays() {
     });
 }
 
-
-
-
-
+// switch case function to decide between the different functions based off of the request
 function pickFunction(caseData, functionData) {
     switch (caseData) {
         case 'movie-this':
@@ -105,9 +94,19 @@ function pickFunction(caseData, functionData) {
     };
 };
 
-
-
-
+// BONOUS: to append content to the sample.txt file
+function appendToFile(content) {
+    fs.appendFile("sample.txt", content, function (err) {
+        // If an error was experienced we will log it.
+        if (err) {
+            console.log(err);
+        }
+        // If no error is experienced, we'll log the phrase "Content Added" to our node console.
+        else {
+            console.log("Content Added to sample.txt file!");
+        }
+    });
+}
 
 //initial function call
 pickFunction(argOne, argTwo);
